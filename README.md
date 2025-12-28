@@ -3,8 +3,8 @@ import java.awt.event.*;
 import javax.swing.*;
 class id extends JFrame{
 	private JPanel contentPane;
-	private JTextField txtname,txtpassword;
-	private JLabel name,password;
+	private JTextField txtname,txtpassword; 
+	private JLabel name,password; 
 	private JButton btnlogin;
 	id(){
 		//視窗設定
@@ -13,7 +13,7 @@ class id extends JFrame{
 		contentPane=new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+		//建立輸入格(帳號、密碼)
 		txtname=new JTextField();
 		txtname.setColumns(20);
 		txtname.setBounds(100,20,120,25);
@@ -23,7 +23,7 @@ class id extends JFrame{
 		txtpassword.setColumns(20);
 		txtpassword.setBounds(100,60,120,25);
 		contentPane.add(txtpassword);
-		
+		//建立提示(帳號、密碼)
 		name=new JLabel("帳號:");
 		name.setBounds(50,25,100,15);
 		contentPane.add(name);
@@ -31,11 +31,11 @@ class id extends JFrame{
 		password=new JLabel("密碼:");
 		password.setBounds(50,65,100,15);
 		contentPane.add(password);
-		
+		//建立登入按鈕
 		btnlogin=new JButton("登入");
 		btnlogin.setBounds(100,100,80,25);
 		contentPane.add(btnlogin);
-		
+		//當登入按鈕按下時，帳號密碼是否正確
 		btnlogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(txtname.getText().equals("abcde") && txtpassword.getText().equals("12345")) {
@@ -49,49 +49,49 @@ class id extends JFrame{
 			}
 		});
 		
-		setTitle("JFrame"); //視窗名稱
+		setTitle("登入帳號"); //視窗名稱
 		setVisible(true); //是否顯示視窗
 	}
 }
 class healthinput extends JFrame {
+	private JPanel panel;
+    	private JTextField txtheight,txtweight; 
+    	private JLabel height,weigth; 
+    	//private JButton btnlogin;
     public healthinput() {
     		//視窗
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("健康資料輸入"); //視窗名稱
         setBounds(100, 100, 300, 350); //視窗位置和大小
-        JPanel panel = new JPanel();
+        panel = new JPanel(); //建立視窗
         panel.setLayout(null);
         setContentPane(panel);
 
-        // --- 介面組件範例 ---
-        JLabel lblHeight = new JLabel("身高 (cm):");
-        lblHeight.setBounds(30, 30, 80, 25);
-        panel.add(lblHeight);
-        JTextField txtHeight = new JTextField();
-        txtHeight.setBounds(120, 30, 100, 25);
-        panel.add(txtHeight);
-
-        JLabel lblWeight = new JLabel("體重 (kg):");
-        lblWeight.setBounds(30, 70, 80, 25);
-        panel.add(lblWeight);
-        JTextField txtWeight = new JTextField();
-        txtWeight.setBounds(120, 70, 100, 25);
-        panel.add(txtWeight);
-
-        JLabel lblAge = new JLabel("年齡:");
-        lblAge.setBounds(30, 110, 80, 25);
-        panel.add(lblAge);
-        JTextField txtAge = new JTextField();
-        txtAge.setBounds(120, 110, 100, 25);
-        panel.add(txtAge);
+        //輸入欄位
+        //身高
+        height = new JLabel("身高 (cm):");
+        height.setBounds(30, 30, 80, 25);
+        panel.add(height);
+        
+        txtheight = new JTextField();
+        txtheight.setBounds(120, 30, 100, 25);
+        panel.add(txtheight);
+        //體重
+        weigth = new JLabel("體重 (kg):");
+        weigth.setBounds(30, 70, 80, 25);
+        panel.add(weigth);
+        
+        txtweight = new JTextField();
+        txtweight.setBounds(120, 70, 100, 25);
+        panel.add(txtweight);
 
         // 運動量可以使用下拉選單 (JComboBox)
         JLabel lblExercise = new JLabel("運動量:");
-        lblExercise.setBounds(30, 150, 80, 25);
+        lblExercise.setBounds(30, 110, 80, 25);
         panel.add(lblExercise);
         String[] options = {"低 (久坐)", "中 (每週3次)", "高 (運動員)"};
         JComboBox<String> comboExercise = new JComboBox<>(options);
-        comboExercise.setBounds(120, 150, 100, 25);
+        comboExercise.setBounds(120, 110, 100, 25);
         panel.add(comboExercise);
 
         JButton btnCalc = new JButton("計算 BMI");
@@ -102,12 +102,12 @@ class healthinput extends JFrame {
     }
 }
 
-class HealthInputWindow extends JFrame {
-    private JTextField txtH, txtW, txtA;
+class outputwindow extends JFrame {
+    private JTextField txtH, txtW ;
     private JComboBox<String> comboAct;
     private JTextArea txtResult; // 用來顯示食譜結果
 
-    public HealthInputWindow() {
+    public outputwindow() {
         setTitle("健康資料輸入與食譜建議");
         setBounds(100, 100, 400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,25 +122,22 @@ class HealthInputWindow extends JFrame {
         addLabel(panel, "體重(kg):", 30, 60);
         txtW = new JTextField(); txtW.setBounds(120, 60, 100, 25); panel.add(txtW);
 
-        addLabel(panel, "年齡:", 30, 100);
-        txtA = new JTextField(); txtA.setBounds(120, 100, 100, 25); panel.add(txtA);
-
-        addLabel(panel, "運動量:", 30, 140);
+        addLabel(panel, "運動量:", 30, 100);
         String[] acts = {"1. 輕度", "2. 中度", "3. 重度"};
         comboAct = new JComboBox<>(acts);
-        comboAct.setBounds(120, 140, 100, 25);
+        comboAct.setBounds(120, 100, 100, 25);
         panel.add(comboAct);
 
-        // --- 結果顯示區域 ---
+        //結果顯示
         txtResult = new JTextArea();
         txtResult.setEditable(false);
         JScrollPane scroll = new JScrollPane(txtResult);
-        scroll.setBounds(30, 230, 320, 200);
+        scroll.setBounds(30, 220, 320, 200);
         panel.add(scroll);
 
-        // --- 計算按鈕 ---
+        //計算按鈕
         JButton btnCalc = new JButton("開始計算");
-        btnCalc.setBounds(120, 185, 100, 30);
+        btnCalc.setBounds(120, 145, 100, 30);
         panel.add(btnCalc);
 
         btnCalc.addActionListener(new ActionListener() {
@@ -178,7 +175,7 @@ class HealthInputWindow extends JFrame {
         p.add(l);
     }
 
-    // 將你的食譜邏輯改為回傳字串
+    // 食譜
     private String getNormalMenu(int act) {
         String s = "💡建議食譜\n早餐：蛋餅 + 無糖豆漿\n午餐：便當（白飯1碗 + 雞腿/排骨 + 青菜）\n晚餐：地瓜1條 + 煎蛋 + 燙青菜\n";
         if (act == 3) s += "加餐：運動後可加一根香蕉或一杯牛奶";
