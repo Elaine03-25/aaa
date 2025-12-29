@@ -57,7 +57,7 @@ class Id extends JFrame{
 class Outputwindow extends JFrame {
     private JTextField txtheight, txtweight ;
     private JComboBox<String> exercise;
-    private JTextArea txtResult; // 用來顯示食譜結果(底下白框)
+    private JTextArea txtresult; // 用來顯示食譜結果(底下白框)
 
     public Outputwindow() {
         setTitle("資料輸入與食譜");
@@ -67,41 +67,40 @@ class Outputwindow extends JFrame {
         panel.setLayout(null);
         setContentPane(panel);
 
-        // --
-        addLabel(panel, "身高(cm):", 30, 20);
+        //輸入介面
+        //身高
+        addLabel(panel, "身高(cm):", 30, 20); //提示
         txtheight = new JTextField(); 
         txtheight.setBounds(120, 20, 100, 25); 
         panel.add(txtheight);
-
-        addLabel(panel, "體重(kg):", 30, 60);
+        //體重
+        addLabel(panel, "體重(kg):", 30, 60); //提示
         txtweight = new JTextField(); 
         txtweight.setBounds(120, 60, 100, 25); 
         panel.add(txtweight);
-
-        addLabel(panel, "運動量:", 30, 100);
-        String[] acts = {"1. 輕度", "2. 中度", "3. 重度"};
-        comboAct = new JComboBox<>(acts);
-        comboAct.setBounds(120, 100, 100, 25);
-        panel.add(comboAct);
-
+        //運動量
+        addLabel(panel, "運動量:", 30, 100); //提示
+        String[] acts = {"1. 輕度", "2. 中度", "3. 重度"}; //選項
+        exercise = new JComboBox<>(acts); //下拉選單
+        exercise.setBounds(120, 100, 100, 25);
+        panel.add(exercise);
         //結果顯示
-        txtResult = new JTextArea();
-        txtResult.setEditable(false);
-        JScrollPane scroll = new JScrollPane(txtResult);
+        txtresult = new JTextArea();
+        txtresult.setEditable(false);
+        JScrollPane scroll = new JScrollPane(txtresult); //建立捲軸
         scroll.setBounds(30, 220, 320, 200);
         panel.add(scroll);
-
-        //計算按鈕
+        //建立計算按鈕
         JButton btnCalc = new JButton("計算");
         btnCalc.setBounds(120, 145, 100, 30);
         panel.add(btnCalc);
-
+        //開始計算
         btnCalc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     double h = Double.parseDouble(txtheight.getText());
                     double w = Double.parseDouble(txtweight.getText());
-                    int activity = comboAct.getSelectedIndex() + 1; // 1, 2, 3
+                    int activity = exercise.getSelectedIndex() + 1; // 1, 2, 3
                     
                     double bmi = w / ((h/100) * (h/100));
                     String res = String.format("你的 BMI 為：%.2f\n", bmi);
@@ -115,22 +114,19 @@ class Outputwindow extends JFrame {
                     } else {
                         res += "體型判斷：肥胖\n" + getObeseMenu(activity);
                     }
-                    txtResult.setText(res);
+                    txtresult.setText(res);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "請輸入正確的數字");
                 }
             }
         });
-
         setVisible(true);
     }
-
     private void addLabel(JPanel p, String text, int x, int y) {
         JLabel l = new JLabel(text);
         l.setBounds(x, y, 80, 25);
         p.add(l);
     }
-
     // 食譜
     private String getNormalMenu(int act) {
         String s = "💡建議食譜\n早餐：蛋餅 + 無糖豆漿\n午餐：便當（白飯1碗 + 雞腿/排骨 + 青菜）\n晚餐：地瓜1條 + 煎蛋 + 燙青菜\n";
