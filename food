@@ -1,0 +1,159 @@
+package food;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+// --- 1. 登入視窗 ---
+class id extends JFrame {
+    private JTextField txtname, txtpassword;
+
+    id() {
+        setTitle("系統登入");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 300, 200);
+        setLayout(null);
+
+        JLabel lblName = new JLabel("帳號:");
+        lblName.setBounds(50, 30, 50, 25);
+        add(lblName);
+
+        txtname = new JTextField("abcde");
+        txtname.setBounds(110, 30, 120, 25);
+        add(txtname);
+
+        JLabel lblPass = new JLabel("密碼:");
+        lblPass.setBounds(50, 70, 50, 25);
+        add(lblPass);
+
+        txtpassword = new JPasswordField("12345");
+        txtpassword.setBounds(110, 70, 120, 25);
+        add(txtpassword);
+
+        JButton btnLogin = new JButton("登入");
+        btnLogin.setBounds(100, 115, 80, 30);
+        add(btnLogin);
+
+        btnLogin.addActionListener(e -> {
+            if (txtname.getText().equals("abcde") && txtpassword.getText().equals("12345")) {
+                new healthinput(); // 開啟輸入頁
+                dispose(); // 關閉登入頁
+            } else {
+                JOptionPane.showMessageDialog(null, "帳密錯誤");
+            }
+        });
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+}
+
+// --- 2. 健康資料輸入視窗 ---
+class healthinput extends JFrame {
+    private JTextField txtH, txtW;
+    private JComboBox<String> comboAct;
+
+    public healthinput() {
+        setTitle("輸入健康資料");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 320, 300);
+        setLayout(null);
+
+        JLabel lblH = new JLabel("身高(cm):");
+        lblH.setBounds(40, 30, 80, 25);
+        add(lblH);
+        txtH = new JTextField();
+        txtH.setBounds(130, 30, 100, 25);
+        add(txtH);
+
+        JLabel lblW = new JLabel("體重(kg):");
+        lblW.setBounds(40, 70, 80, 25);
+        add(lblW);
+        txtW = new JTextField();
+        txtW.setBounds(130, 70, 100, 25);
+        add(txtW);
+
+        JLabel lblA = new JLabel("運動量:");
+        lblA.setBounds(40, 110, 80, 25);
+        add(lblA);
+        String[] options = {"輕度 (久坐)", "中度 (運動)", "重度 (員)"};
+        comboAct = new JComboBox<>(options);
+        comboAct.setBounds(130, 110, 120, 25);
+        add(comboAct);
+
+        JButton btnCalc = new JButton("產生建議食譜");
+        btnCalc.setBounds(80, 180, 140, 35);
+        add(btnCalc);
+
+        btnCalc.addActionListener(e -> {
+            try {
+                double h = Double.parseDouble(txtH.getText());
+                double w = Double.parseDouble(txtW.getText());
+                int activity = comboAct.getSelectedIndex() + 1;
+                
+                // 計算 BMI 與邏輯
+                double bmi = w / ((h / 100) * (h / 100));
+                String report = generateReport(bmi, activity);
+                
+                // --- 跳轉到新視窗 ---
+                new ResultWindow(report); 
+                dispose(); // 關閉輸入頁
+                
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "請輸入有效數字");
+            }
+        });
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private String generateReport(double bmi, int act) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("您的 BMI 為：%.2f\n", bmi));
+        if (bmi < 18.5) {
+            sb.append("體型：過輕\n💡建議：早餐厚片吐司，下午加餐點心。");
+        } else if (bmi < 24) {
+            sb.append("體型：正常\n💡建議：維持現狀，注意營養均衡。");
+        } else if (bmi < 27) {
+            sb.append("體型：過重\n💡建議：少油少鹽，增加有氧運動。");
+        } else {
+            sb.append("體型：肥胖\n💡建議：戒掉炸物與含糖飲料！");
+        }
+        return sb.toString();
+    }
+}
+
+// --- 3. 結果顯示視窗 (這就是你要的新頁面) ---
+class ResultWindow extends JFrame {
+    public ResultWindow(String content) {
+        setTitle("專屬健康建議");
+        setBounds(100, 100, 350, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        JTextArea resultArea = new JTextArea(content);
+        resultArea.setEditable(false);
+        resultArea.setFont(new Font("微軟正黑體", Font.BOLD, 16));
+        resultArea.setMargin(new Insets(20, 20, 20, 20));
+        resultArea.setBackground(new Color(240, 255, 240)); // 淡綠色背景
+
+        add(new JScrollPane(resultArea), BorderLayout.CENTER);
+
+        JButton btnBack = new JButton("重新計算");
+        add(btnBack, BorderLayout.SOUTH);
+
+        btnBack.addActionListener(e -> {
+            new healthinput(); // 回到輸入頁
+            dispose(); // 關閉結果頁
+        });
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+}
+
+public class bmi {
+    public static void main(String[] args) {
+        new id();
+    }
+}
