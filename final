@@ -1,0 +1,185 @@
+package abcd;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+// --- 1. 登入視窗
+class Id extends JFrame {
+    private JTextField txtname;
+    private JPasswordField txtpassword; // 改用密碼框更安全
+
+    Id() {
+        setTitle("系統登入");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 280, 200);
+        setLayout(null);
+
+        JLabel name = new JLabel("帳號:");
+        name.setBounds(50, 30, 50, 25);
+        add(name);
+
+        txtname = new JTextField();
+        txtname.setBounds(110, 30, 120, 25);
+        add(txtname);
+
+        JLabel password = new JLabel("密碼:");
+        password.setBounds(50, 70, 50, 25);
+        add(password);
+
+        txtpassword = new JPasswordField();
+        txtpassword.setBounds(110, 70, 120, 25);
+        add(txtpassword);
+
+        JButton btnlogin = new JButton("登入");
+        btnlogin.setBounds(100, 120, 80, 25);
+        add(btnlogin);
+
+        btnlogin.addActionListener(e -> {
+            String user = txtname.getText();
+            String pass = new String(txtpassword.getPassword());
+            if (user.equals("abcde") && pass.equals("12345")) {
+                JOptionPane.showMessageDialog(null, "登入成功！");
+                new InputWindow(); // 跳轉到輸入頁面
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "帳號或密碼錯誤", "錯誤", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+}
+
+// --- 2. 健康資料輸入視窗 ---
+class InputWindow extends JFrame {
+    private JTextField txtheight, txtweight;
+    private JComboBox<String> exercise;
+
+    public InputWindow() {
+        setTitle("資料輸入");
+        setBounds(100, 100, 320, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+
+        addLabel("身高(cm):", 40, 30);
+        txtheight = new JTextField();
+        txtheight.setBounds(130, 30, 100, 25);
+        add(txtheight);
+
+        addLabel("體重(kg):", 40, 70);
+        txtweight = new JTextField();
+        txtweight.setBounds(130, 70, 100, 25);
+        add(txtweight);
+
+        addLabel("運動量:", 40, 110);
+        String[] acts = {"1. 輕度", "2. 中度", "3. 重度"};
+        exercise = new JComboBox<>(acts);
+        exercise.setBounds(130, 110, 100, 25);
+        add(exercise);
+
+        JButton btnCalc = new JButton("計算並產出食譜");
+        btnCalc.setBounds(80, 180, 150, 35);
+        add(btnCalc);
+
+        btnCalc.addActionListener(e -> {
+            try {
+                double h = Double.parseDouble(txtheight.getText());
+                double w = Double.parseDouble(txtweight.getText());
+                int activity = exercise.getSelectedIndex() + 1;
+                
+                double bmi = w / ((h / 100) * (h / 100));
+                String report = generateReport(bmi, activity);
+                
+                new ResultWindow(report); 
+                dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "請輸入正確的數字");
+            }
+        });
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void addLabel(String text, int x, int y) {
+        JLabel l = new JLabel(text);
+        l.setBounds(x, y, 80, 25);
+        add(l);
+    }
+
+    private String generateReport(double bmi, int activity) {
+        String res = String.format("您的 BMI 為：%.2f\n", bmi);
+        if (bmi < 18.5) {
+            res += "體型判斷：過輕\n" + getUnderWeightMenu(activity);
+        } else if (bmi < 24) {
+            res += "體型判斷：正常\n" + getNormalMenu(activity);
+        } else if (bmi < 27) {
+            res += "體型判斷：過重\n" + getOverWeightMenu(activity);
+        } else {
+            res += "體型判斷：肥胖\n" + getObeseMenu(activity);
+        }
+        return res;
+    }
+
+    // 食譜邏輯 (保留自你的原始程式)
+    private String getNormalMenu(int act) {
+        String s = "*建議食譜\n早餐：蛋餅 + 無糖豆漿\n午餐：便當（白飯1碗 + 雞腿/排骨 + 青菜）\n晚餐：地瓜1條 + 煎蛋 + 燙青菜\n";
+        if (act == 3) s += "加餐：運動後可加一根香蕉或一杯牛奶";
+        return s;
+    }
+    private String getOverWeightMenu(int act) {
+        String s = "*建議食譜\n早餐：全麥吐司1片 + 煎蛋 + 無糖豆漿\n午餐：便當（飯少 + 滷雞腿 + 青菜2樣）\n晚餐：滷味（豆乾、蛋、海帶）+ 燙青菜\n";
+        if (act == 1) s += "提醒：避免含糖飲料與宵夜";
+        return s;
+    }
+    private String getObeseMenu(int act) {
+        return "*建議食譜\n早餐：茶葉蛋2顆 + 黑咖啡或無糖豆漿\n午餐：自助餐（飯半碗 + 雞胸/白切雞 + 青菜2~3樣）\n晚餐：清湯火鍋（蔬菜 + 豆腐 + 雞肉）\n💥注意：避免炸物、加工食品";
+    }
+    private String getUnderWeightMenu(int act) {
+        String s = "*建議食譜\n早餐：厚片吐司 + 鮮奶或奶茶\n午餐：白飯1.5碗 + 雞腿或排骨 + 青菜\n晚餐：義大利麵或咖哩飯 + 湯品\n";
+        if (act >= 2) s += "加餐：下午可加點心（麵包或香蕉）";
+        return s;
+    }
+}
+
+// --- 3. 結果顯示視窗
+class ResultWindow extends JFrame {
+    public ResultWindow(String content) {
+        setTitle("專屬健康建議");
+        setBounds(100, 100, 380, 350);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        JTextArea resultArea = new JTextArea(content);
+        resultArea.setEditable(false);
+        // 設定字體與樣式讓結果更易讀
+        resultArea.setFont(new Font("微軟正黑體", Font.BOLD, 16));
+        resultArea.setMargin(new Insets(20, 20, 20, 20));
+        resultArea.setBackground(new Color(245, 250, 255)); 
+        resultArea.setBackground(new Color(240, 255, 240)); // 淡綠色背景
+
+        add(new JScrollPane(resultArea), BorderLayout.CENTER);
+
+        JButton btnBack = new JButton("重新計算");
+        btnBack.setPreferredSize(new Dimension(0, 40));
+        add(btnBack, BorderLayout.SOUTH);
+
+        btnBack.addActionListener(e -> {
+            new InputWindow(); // 回到輸入頁
+            dispose();
+        });
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+}
+
+public class dddd {
+    public static void main(String[] args) {
+        // 設定系統預設風格
+        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
+        new Id();
+    }
+}
