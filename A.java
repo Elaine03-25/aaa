@@ -48,17 +48,14 @@ class Id extends JFrame{
 		        }
 			}
 		});
-		
 		setTitle("登入帳號"); //視窗名稱
 		setVisible(true); //是否顯示視窗
 	}
 }
-
 class Outputwindow extends JFrame {
     private JTextField txtheight, txtweight ;
     private JComboBox<String> exercise;
     private JTextArea txtresult; // 用來顯示食譜結果(底下白框)
-
     public Outputwindow() {
         setTitle("資料輸入與食譜");
         setBounds(100, 100, 400, 500);
@@ -66,7 +63,6 @@ class Outputwindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(null);
         setContentPane(panel);
-
         //輸入介面
         //身高
         addLabel(panel, "身高(cm):", 30, 20); //提示
@@ -98,30 +94,32 @@ class Outputwindow extends JFrame {
         btnCalc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    double h = Double.parseDouble(txtheight.getText());
-                    double w = Double.parseDouble(txtweight.getText());
-                    int activity = exercise.getSelectedIndex() + 1; // 1, 2, 3
-                    
-                    double bmi = w / ((h/100) * (h/100));
-                    String res = String.format("你的 BMI 為：%.2f\n", bmi);
-                    
-                    if (bmi < 18.5) {
+                    double height = Double.parseDouble(txtheight.getText()); //將字串改為數字
+                    double weight = Double.parseDouble(txtweight.getText()); //將字串改為數字
+                    int activity = exercise.getSelectedIndex() + 1; //取得下拉選單的選項
+                    double BMI = weight / ((height / 100) * (height / 100)); //計算BMI
+                    String res = String.format("你的 BMI 為：%.2f\n", BMI); //輸出BMI
+                    //體型判斷，並輸出對應的食譜
+                    if (BMI < 18.5) {
                         res += "體型判斷：過輕\n" + getUnderWeightMenu(activity);
-                    } else if (18.5<= bmi && bmi < 24) {
+                    } else if (18.5<= BMI && BMI < 24) {
                         res += "體型判斷：正常\n" + getNormalMenu(activity);
-                    } else if (24<=bmi && bmi < 27) {
+                    } else if (24<=BMI && BMI < 27) {
                         res += "體型判斷：過重\n" + getOverWeightMenu(activity);
                     } else {
                         res += "體型判斷：肥胖\n" + getObeseMenu(activity);
                     }
-                    txtresult.setText(res);
-                } catch (Exception ex) {
+                    txtresult.setText(res); //在白色框裡輸出
+                } 
+                //判斷輸入的內容是否為數字
+                catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "請輸入正確的數字");
                 }
             }
         });
-        setVisible(true);
+        setVisible(true); //顯示視窗
     }
+    //排版
     private void addLabel(JPanel p, String text, int x, int y) {
         JLabel l = new JLabel(text);
         l.setBounds(x, y, 80, 25);
@@ -133,27 +131,22 @@ class Outputwindow extends JFrame {
         if (act == 3) s += "加餐：運動後可加一根香蕉或一杯牛奶";
         return s;
     }
-
     private String getOverWeightMenu(int act) {
         String s = "💡建議食譜\n早餐：全麥吐司1片 + 煎蛋 + 無糖豆漿\n午餐：便當（飯少 + 滷雞腿 + 青菜2樣）\n晚餐：滷味（豆乾、蛋、海帶）+ 燙青菜\n";
         if (act == 1) s += "提醒：避免含糖飲料與宵夜";
         return s;
     }
-
     private String getObeseMenu(int act) {
         return "💡建議食譜\n早餐：茶葉蛋2顆 + 黑咖啡或無糖豆漿\n午餐：自助餐（飯半碗 + 雞胸/白切雞 + 青菜2~3樣）\n晚餐：清湯火鍋（蔬菜 + 豆腐 + 雞肉）\n💥注意：避免炸物、加工食品";
     }
-
     private String getUnderWeightMenu(int act) {
         String s = "💡建議食譜\n早餐：厚片吐司 + 鮮奶或奶茶\n午餐：白飯1.5碗 + 雞腿或排骨 + 青菜\n晚餐：義大利麵或咖哩飯 + 湯品\n";
         if (act >= 2) s += "加餐：下午可加點心（麵包或香蕉）";
         return s;
     }
 }
-
 public class A {
 	public static void main(String[] args) {
 		Id f = new Id();
 	}
-
 }
