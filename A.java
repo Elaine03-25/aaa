@@ -53,55 +53,10 @@ class Id extends JFrame{
 		setVisible(true); //是否顯示視窗
 	}
 }
-class Healthinput extends JFrame {
-	private JPanel panel;
-    	private JTextField txtheight,txtweight; 
-    	private JLabel height,weigth,exercise; 
-    public Healthinput() {
-    		//視窗
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("資料輸入"); //視窗名稱
-        setBounds(100, 100, 300, 350); //視窗位置和大小
-        panel = new JPanel(); //建立視窗
-        panel.setLayout(null);
-        setContentPane(panel);
-
-        //輸入欄位
-        //身高
-        height = new JLabel("身高 (cm):");
-        height.setBounds(30, 30, 80, 25);
-        panel.add(height);
-        
-        txtheight = new JTextField();
-        txtheight.setBounds(120, 30, 100, 25);
-        panel.add(txtheight);
-        //體重
-        weigth = new JLabel("體重 (kg):");
-        weigth.setBounds(30, 70, 80, 25);
-        panel.add(weigth);
-        
-        txtweight = new JTextField();
-        txtweight.setBounds(120, 70, 100, 25);
-        panel.add(txtweight);
-        // 運動量可以使用下拉選單 (JComboBox)
-        exercise = new JLabel("運動量:");
-        exercise.setBounds(30, 110, 80, 25);
-        panel.add(exercise);
-        String[] options = {"低 (久坐)", "中 (每週3次)", "高 (運動員)"};
-        JComboBox<String> comboExercise = new JComboBox<>(options);
-        comboExercise.setBounds(120, 110, 100, 25);
-        panel.add(comboExercise);
-        //建立計算按鈕
-        JButton btncalculate = new JButton("計算 BMI");
-        btncalculate.setBounds(80, 220, 120, 30);
-        panel.add(btncalculate);
-        setVisible(true);
-    }
-}
 
 class Outputwindow extends JFrame {
-    private JTextField txtH, txtW ;
-    private JComboBox<String> comboAct;
+    private JTextField txtheight, txtweight ;
+    private JComboBox<String> exercise;
     private JTextArea txtResult; // 用來顯示食譜結果(底下白框)
 
     public Outputwindow() {
@@ -112,12 +67,16 @@ class Outputwindow extends JFrame {
         panel.setLayout(null);
         setContentPane(panel);
 
-        // --- 輸入組件 ---
+        // --
         addLabel(panel, "身高(cm):", 30, 20);
-        txtH = new JTextField(); txtH.setBounds(120, 20, 100, 25); panel.add(txtH);
+        txtheight = new JTextField(); 
+        txtheight.setBounds(120, 20, 100, 25); 
+        panel.add(txtheight);
 
         addLabel(panel, "體重(kg):", 30, 60);
-        txtW = new JTextField(); txtW.setBounds(120, 60, 100, 25); panel.add(txtW);
+        txtweight = new JTextField(); 
+        txtweight.setBounds(120, 60, 100, 25); 
+        panel.add(txtweight);
 
         addLabel(panel, "運動量:", 30, 100);
         String[] acts = {"1. 輕度", "2. 中度", "3. 重度"};
@@ -133,15 +92,15 @@ class Outputwindow extends JFrame {
         panel.add(scroll);
 
         //計算按鈕
-        JButton btnCalc = new JButton("開始計算");
+        JButton btnCalc = new JButton("計算");
         btnCalc.setBounds(120, 145, 100, 30);
         panel.add(btnCalc);
 
         btnCalc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    double h = Double.parseDouble(txtH.getText());
-                    double w = Double.parseDouble(txtW.getText());
+                    double h = Double.parseDouble(txtheight.getText());
+                    double w = Double.parseDouble(txtweight.getText());
                     int activity = comboAct.getSelectedIndex() + 1; // 1, 2, 3
                     
                     double bmi = w / ((h/100) * (h/100));
